@@ -1,6 +1,6 @@
 "use client";
 
-import App from "../pages/app";
+import App from "../components/app";
 
 export default function Home() {
   return (

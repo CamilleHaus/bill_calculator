@@ -1,15 +1,28 @@
+"use client";
+
 import Input from "@/components/Input";
-import "../app/globals.css";
+import "../../app/globals.css";
 import Button from "@/components/Button";
+import { useCalculation } from "@/providers/CalculationContext";
 
 const Calculation = () => {
+  const {
+    participants,
+    setParticipants,
+    setTip,
+    setBillTotal,
+    tip,
+    billTotal,
+    removeParticipant,
+  } = useCalculation();
+
   return (
     <div className="w-full bg-gray-50 h-[100vh] flex items-center justify-center">
       <div className="w-[400px] border bg-gray-100 mx-auto space-y-6 px-4 py-6 rounded-md shadow-lg">
         <h3>Nome do rolê</h3>
         <div className="flex justify-between">
           <p>Valor total da conta: </p>
-          <p>1250</p>
+          <p>{billTotal}</p>
         </div>
         <div className="flex flex-col gap-6">
           <Input
@@ -24,7 +37,13 @@ const Calculation = () => {
             type={"text"}
             placeholder={"Selecione alguem"}
           />
-          <Button onClick={() => null}>Enter</Button>
+          <Input
+            label={"Valor do consumo:"}
+            name={""}
+            type={"text"}
+            placeholder={"0.00"}
+          />
+          <Button type="button">Enter</Button>
         </div>
 
         <div className="space-y-4 border-t border-gray-300">
