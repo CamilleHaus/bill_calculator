@@ -16,6 +16,10 @@ const Calculation = () => {
     removeParticipant,
   } = useCalculation();
 
+  const participant = localStorage.getItem("@participants")
+
+  console.log(participant)
+
   return (
     <div className="w-full bg-gray-50 h-[100vh] flex items-center justify-center">
       <div className="w-[400px] border bg-gray-100 mx-auto space-y-6 px-4 py-6 rounded-md shadow-lg">

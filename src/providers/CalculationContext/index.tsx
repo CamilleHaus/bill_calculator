@@ -11,14 +11,19 @@ import {
 } from "react";
 
 interface CalculationContextProps {
-  participants: string[];
-  setParticipants: Dispatch<SetStateAction<string[]>>;
+  participants: IParticipant[];
+  setParticipants: Dispatch<SetStateAction<IParticipant[]>>;
   setTip: Dispatch<SetStateAction<number | undefined>>;
   setBillTotal: Dispatch<SetStateAction<number | undefined>>;
   tip: number | undefined;
   billTotal: number | undefined;
   removeParticipant: (index: number) => void;
 
+}
+
+interface IParticipant {
+  name: string;
+  amount: number;
 }
 
 export const CalculationContext = createContext<
@@ -28,7 +33,7 @@ export const CalculationContext = createContext<
 export const CalculationProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [participants, setParticipants] = useState<string[]>([]);
+  const [participants, setParticipants] = useState<IParticipant[]>([]);
   const [tip, setTip] = useState<number | undefined>();
   const [billTotal, setBillTotal] = useState<number | undefined>();
 
