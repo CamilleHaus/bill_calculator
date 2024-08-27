@@ -13,11 +13,18 @@ const App = () => {
     tip,
     billTotal,
     removeParticipant,
+    consuptionInfo,
+    setConsuptionInfo,
+    setAmountToPayEach,
+    amountToPayEach,
   } = useCalculation();
 
   const participantInputRef = useRef<HTMLInputElement>(null);
   const billTotalInputRef = useRef<HTMLInputElement>(null);
   const tipValueInputRef = useRef<HTMLInputElement>(null);
+  const consuptionNameInputRef = useRef<HTMLInputElement>(null);
+  const consuptionValueInputRef = useRef<HTMLInputElement>(null);
+  const selectPeopleInputRef = useRef<HTMLSelectElement>(null);
 
   const addParticipant = (e: FormEvent) => {
     e.preventDefault();
@@ -31,7 +38,7 @@ const App = () => {
       return;
     }
 
-    setParticipants([...participants, { name, amount: 0 }]);
+    setParticipants([...participants, { name, amount: [0] }]);
 
     if (participantInputRef.current) {
       participantInputRef.current.value = "";
@@ -54,6 +61,52 @@ const App = () => {
       billTotalInputRef.current.value = "";
     }
   };
+
+  const addConsuptionInformation = (e: FormEvent) => {
+    e.preventDefault();
+
+    const consuptionName = consuptionNameInputRef.current?.value as string;
+    const consuptionValue = consuptionValueInputRef.current?.value;
+
+    const selectedOptions = selectPeopleInputRef.current?.options;
+    const selectedPeople: any = [];
+
+    if (selectedOptions) {
+      for (let i = 0; i < selectedOptions.length; i++) {
+        if (selectedOptions[i].selected) {
+          selectedPeople.push(selectedOptions[i].value);
+        }
+      }
+    }
+
+    const amountToPay = Number(consuptionValue) / selectedPeople.length;
+
+    setAmountToPayEach([...amountToPayEach, amountToPay]);
+
+    setConsuptionInfo([
+      ...consuptionInfo,
+      {
+        name: consuptionName,
+        price: Number(consuptionValue),
+        people: selectedPeople,
+      },
+    ]);
+
+    const updatedParticipants = participants.map((participant) => {
+      if (selectedPeople.includes(participant.name)) {
+        return {
+          ...participant,
+          amount: [...amountToPayEach, amountToPay],
+        };
+      }
+      return participant;
+    });
+
+    setParticipants(updatedParticipants);
+  };
+
+  console.log(consuptionInfo);
+  console.log(amountToPayEach);
 
   return (
     <div>
@@ -137,8 +190,12 @@ const App = () => {
             <p>Valor total da conta: </p>
             <p>{billTotal}</p>
           </div>
-          <div className="flex flex-col gap-6">
+          <form
+            onSubmit={addConsuptionInformation}
+            className="flex flex-col gap-6"
+          >
             <Input
+              ref={consuptionNameInputRef}
               label={"O que foi consumido?"}
               name={"item"}
               type={"text"}
@@ -147,6 +204,7 @@ const App = () => {
             <div className="flex flex-col gap-2">
               <label htmlFor="participant-select">Quem consumiu?</label>
               <select
+                ref={selectPeopleInputRef}
                 id="participant-select"
                 className="px-2 py-3 rounded-md"
                 multiple
@@ -163,13 +221,14 @@ const App = () => {
               </select>
             </div>
             <Input
+              ref={consuptionValueInputRef}
               label={"Valor do consumo:"}
               name={""}
               type={"text"}
               placeholder={"0.00"}
             />
-            <Button type="button">Enter</Button>
-          </div>
+            <Button type="submit">Enter</Button>
+          </form>
 
           <div className="space-y-4 border-t border-gray-300">
             <h3 className="mt-3">Participantes e Valores</h3>
@@ -181,7 +240,7 @@ const App = () => {
                       className="w-[48%] flex justify-between shadow-md bg-gray-200 p-3 rounded-md"
                     >
                       <p>{participant.name}</p>
-                      <p>{participant.amount}</p>
+                      <p>{participant.amount.reduce((acc, cur) => acc + cur)}</p>
                     </div>
                   ))
                 : null}
