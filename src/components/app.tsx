@@ -17,6 +17,8 @@ const App = () => {
     setConsuptionInfo,
     setAmountToPayEach,
     amountToPayEach,
+    consuptionList,
+    setConsuptionList,
   } = useCalculation();
 
   const participantInputRef = useRef<HTMLInputElement>(null);
@@ -25,6 +27,8 @@ const App = () => {
   const consuptionNameInputRef = useRef<HTMLInputElement>(null);
   const consuptionValueInputRef = useRef<HTMLInputElement>(null);
   const selectPeopleInputRef = useRef<HTMLSelectElement>(null);
+
+  // ADICIONAR PARTICIPANTES __________________________________
 
   const addParticipant = (e: FormEvent) => {
     e.preventDefault();
@@ -62,6 +66,8 @@ const App = () => {
     }
   };
 
+  // INFORMACAO DE CONSUMO E DIVISAO DE VALORES __________________________________
+
   const addConsuptionInformation = (e: FormEvent) => {
     e.preventDefault();
 
@@ -79,9 +85,21 @@ const App = () => {
       }
     }
 
-    const amountToPay = Number(consuptionValue) / selectedPeople.length;
+    setConsuptionList([
+      ...consuptionList,
+      {
+        name: consuptionName,
+        price: Number(consuptionValue),
+        people: [selectedPeople],
+      },
+    ]);
 
-    setAmountToPayEach([...amountToPayEach, amountToPay]);
+    const tipMath = 1 + tip! / 100;
+
+    const amountToPay = Number(consuptionValue) / selectedPeople.length;
+    const amountToPayWithTip = amountToPay * tipMath;
+
+    setAmountToPayEach([...amountToPayEach, amountToPayWithTip]);
 
     setConsuptionInfo([
       ...consuptionInfo,
@@ -96,7 +114,7 @@ const App = () => {
       if (selectedPeople.includes(participant.name)) {
         return {
           ...participant,
-          amount: [...amountToPayEach, amountToPay],
+          amount: [...amountToPayEach, amountToPayWithTip],
         };
       }
       return participant;
@@ -105,8 +123,33 @@ const App = () => {
     setParticipants(updatedParticipants);
   };
 
-  console.log(consuptionInfo);
-  console.log(amountToPayEach);
+  // Problema atual da função: O valor está sendo removido da lisa
+  // Porém não está sendo removido do total individual de cada participante
+
+  const removeConsumedItem = (index: number) => {
+    const removedItem = consuptionList[index];
+    setConsuptionList(consuptionList.filter((_, i) => i !== index));
+
+    const updatedParticipants = participants.map((participant) => {
+      if (removedItem.people.includes(participant.name)) {
+        const priceUpdated = removedItem.price / removedItem.people.length;
+        const updatedAmounts = participant.amount.filter(
+          (amount) => amount !== priceUpdated
+        );
+
+        return {
+          ...participant,
+          amount: updatedAmounts,
+        };
+      }
+
+      return participant;
+    });
+    setParticipants(updatedParticipants);
+  };
+
+  console.log(consuptionList, "******* LIST");
+  console.log(participants, "PARTICIPANTs");
 
   return (
     <div>
@@ -201,6 +244,30 @@ const App = () => {
               type={"text"}
               placeholder={"ex: Cerveja"}
             />
+
+            {consuptionList.length > 0 ? (
+              <div className="w-full flex gap-3 flex-wrap">
+                {consuptionList.map((item, index) => (
+                  <div
+                    key={index}
+                    className="w-fit flex gap-3 items-center justify-center p-2 rounded-md shadow-md"
+                  >
+                    <div className="flex gap-1">
+                      <p>{item.name}</p>
+                      <p>{item.price}</p>
+                    </div>
+                    <button
+                      className="text-sm"
+                      type="button"
+                      onClick={() => removeConsumedItem(index)}
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
             <div className="flex flex-col gap-2">
               <label htmlFor="participant-select">Quem consumiu?</label>
               <select
@@ -240,7 +307,9 @@ const App = () => {
                       className="w-[48%] flex justify-between shadow-md bg-gray-200 p-3 rounded-md"
                     >
                       <p>{participant.name}</p>
-                      <p>{participant.amount.reduce((acc, cur) => acc + cur)}</p>
+                      <p>
+                        {participant.amount.reduce((acc, cur) => acc + cur)}
+                      </p>
                     </div>
                   ))
                 : null}

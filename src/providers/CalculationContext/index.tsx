@@ -22,6 +22,8 @@ interface CalculationContextProps {
   setConsuptionInfo: Dispatch<SetStateAction<IConsumption[]>>;
   amountToPayEach: number[];
   setAmountToPayEach: Dispatch<SetStateAction<number[]>>;
+  consuptionList: IConsumption[];
+  setConsuptionList:  Dispatch<SetStateAction<IConsumption[]>>;
 }
 
 interface IParticipant {
@@ -47,6 +49,7 @@ export const CalculationProvider: React.FC<{ children: ReactNode }> = ({
   const [billTotal, setBillTotal] = useState<number | undefined>();
   const [consuptionInfo, setConsuptionInfo] = useState<IConsumption[]>([]);
   const [amountToPayEach, setAmountToPayEach] = useState<number[]>([]);
+  const [consuptionList, setConsuptionList] = useState<IConsumption[]>([]);
 
   const removeParticipant = (index: number) => {
     setParticipants(participants.filter((_, i) => i !== index));
@@ -65,7 +68,9 @@ export const CalculationProvider: React.FC<{ children: ReactNode }> = ({
         consuptionInfo,
         setConsuptionInfo,
         amountToPayEach, 
-        setAmountToPayEach
+        setAmountToPayEach,
+        consuptionList,
+        setConsuptionList
       }}
     >
       {children}
