@@ -3,6 +3,7 @@ import Button from "./Button";
 import Input from "./Input";
 import { useCalculation } from "@/providers/CalculationContext";
 import { FormEvent, useRef } from "react";
+import ConsuptionList from "./renders/consuption-list";
 
 const App = () => {
   const {
@@ -13,10 +14,6 @@ const App = () => {
     tip,
     billTotal,
     removeParticipant,
-    consuptionInfo,
-    setConsuptionInfo,
-    setAmountToPayEach,
-    amountToPayEach,
     consuptionList,
     setConsuptionList,
   } = useCalculation();
@@ -75,7 +72,7 @@ const App = () => {
     const consuptionValue = consuptionValueInputRef.current?.value;
 
     const selectedOptions = selectPeopleInputRef.current?.options;
-    const selectedPeople: any = [];
+    const selectedPeople: string[] = [];
 
     if (selectedOptions) {
       for (let i = 0; i < selectedOptions.length; i++) {
@@ -85,86 +82,89 @@ const App = () => {
       }
     }
 
-    setConsuptionList([
-      ...consuptionList,
-      {
-        name: consuptionName,
-        price: Number(consuptionValue),
-        people: [selectedPeople],
-      },
-    ]);
-
     const tipMath = 1 + tip! / 100;
 
     const amountToPay = Number(consuptionValue) / selectedPeople.length;
     const amountToPayWithTip = amountToPay * tipMath;
 
-    setAmountToPayEach([...amountToPayEach, amountToPayWithTip]);
-
-    setConsuptionInfo([
-      ...consuptionInfo,
+    setConsuptionList([
+      ...consuptionList,
       {
         name: consuptionName,
         price: Number(consuptionValue),
+        pricePerPerson: amountToPayWithTip,
         people: selectedPeople,
       },
     ]);
 
     const updatedParticipants = participants.map((participant) => {
       if (selectedPeople.includes(participant.name)) {
+        const newAmount = [...participant.amount, amountToPayWithTip];
+
         return {
           ...participant,
-          amount: [...amountToPayEach, amountToPayWithTip],
+          amount: newAmount,
         };
       }
       return participant;
     });
 
     setParticipants(updatedParticipants);
-  };
 
-  // Problema atual da função: O valor está sendo removido da lisa
-  // Porém não está sendo removido do total individual de cada participante
+    if (consuptionNameInputRef.current) {
+      consuptionNameInputRef.current.value = "";
+    }
+
+    if (consuptionValueInputRef.current) {
+      consuptionValueInputRef.current.value = "";
+    }
+  };
 
   const removeConsumedItem = (index: number) => {
-    const removedItem = consuptionList[index];
+    const itemToRemove = consuptionList[index];
+
     setConsuptionList(consuptionList.filter((_, i) => i !== index));
 
+    const pricePerPersonItem = itemToRemove.pricePerPerson;
+
     const updatedParticipants = participants.map((participant) => {
-      if (removedItem.people.includes(participant.name)) {
-        const priceUpdated = removedItem.price / removedItem.people.length;
-        const updatedAmounts = participant.amount.filter(
-          (amount) => amount !== priceUpdated
-        );
+      const index = participant.amount.findIndex(
+        (num) => num === pricePerPersonItem
+      );
+
+      if (index >= 0) {
+        const newAmount = [...participant.amount];
+
+        newAmount.splice(index, 1);
 
         return {
           ...participant,
-          amount: updatedAmounts,
+          amount: newAmount,
         };
+      } else {
+        return participant;
       }
-
-      return participant;
     });
+
     setParticipants(updatedParticipants);
   };
 
-  console.log(consuptionList, "******* LIST");
-  console.log(participants, "PARTICIPANTs");
+  const totalAmount = participants.reduce((acc, participant) => {
+    const participantTotal = participant.amount.reduce(
+      (sum, value) => sum + value,
+      0
+    );
+    return acc + participantTotal;
+  }, 0);
 
   return (
     <div>
-      <div className="w-full bg-gray-50 h-[100vh] flex items-center justify-center">
-        <div className="w-[400px] border bg-gray-100 mx-auto space-y-6 px-4 py-6 rounded-md shadow-lg">
+      <div className="w-full bg-gray-50 p-5 flex items-center justify-center">
+        <div className="w-[450px] border bg-gray-100 mx-auto space-y-4 px-6 py-6 rounded-md shadow-lg">
           <div className="w-full flex items-center justify-center gap-2">
             <h1 className="text-2xl font-bold">Saidinha</h1>
             <Beer size={28} strokeWidth={2} />
           </div>
-          <Input
-            label={"Nome do rolê"}
-            name={"name"}
-            type={"text"}
-            placeholder={"Digite o tipo de rolê aqui"}
-          />
 
           {/* FORMULÁRIO DE PARTICIPANTES */}
           <form onSubmit={addParticipant} className="flex gap-2 items-end">
@@ -222,16 +222,15 @@ const App = () => {
             </div>
             <Button type="submit">Fazer Conta</Button>
           </form>
-        </div>
-      </div>
 
-      {/* FORMULÁRIO SEGUINTE */}
-      <div className="w-full bg-gray-50 h-[100vh] flex items-center justify-center">
-        <div className="w-[400px] border bg-gray-100 mx-auto space-y-6 px-4 py-6 rounded-md shadow-lg">
-          <h3>Nome do rolê</h3>
+          <div className="border-b border-gray-300 py-2"></div>
           <div className="flex justify-between">
             <p>Valor total da conta: </p>
             <p>{billTotal}</p>
+          </div>
+          <div className="flex justify-between">
+            <p>Valor restante para pagar: </p>
+            <p>{billTotal! - totalAmount}</p>
           </div>
           <form
             onSubmit={addConsuptionInformation}
@@ -248,22 +247,12 @@ const App = () => {
             {consuptionList.length > 0 ? (
               <div className="w-full flex gap-3 flex-wrap">
                 {consuptionList.map((item, index) => (
-                  <div
+                  <ConsuptionList
                     key={index}
-                    className="w-fit flex gap-3 items-center justify-center p-2 rounded-md shadow-md"
-                  >
-                    <div className="flex gap-1">
-                      <p>{item.name}</p>
-                      <p>{item.price}</p>
-                    </div>
-                    <button
-                      className="text-sm"
-                      type="button"
-                      onClick={() => removeConsumedItem(index)}
-                    >
-                      X
-                    </button>
-                  </div>
+                    onClick={() => removeConsumedItem(index)}
+                    name={item.name}
+                    price={item.price}
+                  />
                 ))}
               </div>
             ) : null}
@@ -308,7 +297,9 @@ const App = () => {
                     >
                       <p>{participant.name}</p>
                       <p>
-                        {participant.amount.reduce((acc, cur) => acc + cur)}
+                        {participant.amount.length > 0
+                          ? participant.amount.reduce((acc, cur) => acc + cur)
+                          : 0}
                       </p>
                     </div>
                   ))
