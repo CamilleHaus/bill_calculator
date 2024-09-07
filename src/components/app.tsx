@@ -159,8 +159,8 @@ const App = () => {
 
   return (
     <div>
-      <div className="w-full bg-gray-50 p-5 flex items-center justify-center">
-        <div className="max-w-[450px] w-[100%] border bg-gray-100 mx-auto space-y-4 px-6 py-6 rounded-md shadow-lg">
+      <div className="w-full bg-gray-50 p-5 max-sm:p-1 flex items-center justify-center">
+        <div className="max-w-[450px] w-[100%] border bg-gray-100 mx-auto space-y-4 max-sm:px-4 px-6 py-6 rounded-md shadow-lg">
           <div className="w-full flex items-center justify-center gap-2">
             <h1 className="text-2xl font-bold">Saidinha</h1>
             <Beer size={28} strokeWidth={2} />
@@ -229,7 +229,7 @@ const App = () => {
             <p>{billTotal}</p>
           </div>
           <div className="flex justify-between">
-            <p>Valor restante para pagar: </p>
+            <p>Valor restante a pagar: </p>
             {Number.isNaN(billTotal! - totalAmount) ? (
               <p>0</p>
             ) : (
