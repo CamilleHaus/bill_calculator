@@ -160,7 +160,7 @@ const App = () => {
   return (
     <div>
       <div className="w-full bg-gray-50 p-5 flex items-center justify-center">
-        <div className="w-[450px] border bg-gray-100 mx-auto space-y-4 px-6 py-6 rounded-md shadow-lg">
+        <div className="max-w-[450px] w-[100%] border bg-gray-100 mx-auto space-y-4 px-6 py-6 rounded-md shadow-lg">
           <div className="w-full flex items-center justify-center gap-2">
             <h1 className="text-2xl font-bold">Saidinha</h1>
             <Beer size={28} strokeWidth={2} />
@@ -204,7 +204,7 @@ const App = () => {
 
           {/* FORMULÁRIO DE GORJETA E VALOR */}
           <form onSubmit={getAllInfo} className="flex flex-col gap-6">
-            <div className="flex gap-4">
+            <div className="flex gap-4 max-sm:flex-col">
               <Input
                 ref={billTotalInputRef}
                 label={"Valor total da conta"}
@@ -230,7 +230,11 @@ const App = () => {
           </div>
           <div className="flex justify-between">
             <p>Valor restante para pagar: </p>
-            <p>{billTotal! - totalAmount}</p>
+            {Number.isNaN(billTotal! - totalAmount) ? (
+              <p>0</p>
+            ) : (
+              <p>{(billTotal! - totalAmount).toFixed(2)}</p>
+            )}
           </div>
           <form
             onSubmit={addConsuptionInformation}
@@ -293,12 +297,12 @@ const App = () => {
                 ? participants.map((participant, index) => (
                     <div
                       key={index}
-                      className="w-[48%] flex justify-between shadow-md bg-gray-200 p-3 rounded-md"
+                      className="w-[48%] max-sm:w-[47%] flex justify-between shadow-md bg-gray-200 p-3 rounded-md"
                     >
                       <p>{participant.name}</p>
                       <p>
                         {participant.amount.length > 0
-                          ? participant.amount.reduce((acc, cur) => acc + cur)
+                          ? participant.amount.reduce((acc, cur) => acc + cur).toFixed(2)
                           : 0}
                       </p>
                     </div>
