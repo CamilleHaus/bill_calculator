@@ -8,9 +8,9 @@ interface IConsuptionList {
 
 const ConsuptionList = ({ onClick, name, price }: IConsuptionList) => {
   return (
-    <div className="w-fit flex gap-3 items-center justify-center p-2 rounded-md shadow-md">
+    <div className="w-fit flex gap-3 items-center text-[#666666] justify-center py-2 rounded-full border px-4 text-sm font-semibold">
       <div className="flex gap-1">
-        <p>{name}</p>
+        <p>{name} |</p>
         <p>{price}</p>
       </div>
       <button className="text-sm" type="button" onClick={onClick}>

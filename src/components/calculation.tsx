@@ -114,13 +114,15 @@ const Calculation = () => {
     <div>
       {/* FORMULÁRIO DE PARTICIPANTES */}
 
-      <div className="flex justify-between mb-4">
-        <div className="flex flex-col items-center justify-between bg-gray-50 px-3 py-2 rounded-md gap-1">
-          <p>Valor total da conta</p>
-          <p>{billTotal}</p>
+      <div className="flex  mb-4 border text-sm text-[#666666]">
+        <div className="w-full flex flex-col items-center bg-gray-50 px-3 py-2 rounded-md gap-2 border-r">
+          <p className="text-center">Valor total</p>
+          <p className="border-b w-full"></p>
+          <p className="mt-1">{billTotal}</p>
         </div>
-        <div className="flex flex-col items-center justify-between bg-gray-50 px-3 py-2 rounded-md gap-1">
-          <p>Valor restante a pagar: </p>
+        <div className="flex flex-col items-center justify-between w-full bg-gray-50 px-3 py-2 rounded-md gap-1">
+          <p className="text-center">Valor restante </p>
+           <p className="border-b w-full"></p>
           {Number.isNaN(billTotal! - totalAmount) ? (
             <p>0</p>
           ) : (
@@ -128,7 +130,7 @@ const Calculation = () => {
           )}
         </div>
       </div>
-      <form onSubmit={addConsuptionInformation} className="flex flex-col gap-2">
+      <form onSubmit={addConsuptionInformation} className="flex flex-col gap-6 pt-4">
         <Input
           ref={consuptionNameInputRef}
           label={"O que foi consumido?"}
@@ -150,7 +152,7 @@ const Calculation = () => {
           </div>
         ) : null}
 
-        <div className="flex flex-col gap-2 mb-2">
+        <div className="flex flex-col gap-2 mb-2 text-[#666666] font-semibold">
           <label htmlFor="participant-select">Quem consumiu?</label>
           <select
             ref={selectPeopleInputRef}
@@ -160,7 +162,7 @@ const Calculation = () => {
           >
             {participants.length > 0 ? (
               participants.map((participant, index) => (
-                <option key={index} value={participant.name}>
+                <option key={index} value={participant.name} className="text-sm">
                   {participant.name}
                 </option>
               ))
@@ -176,21 +178,21 @@ const Calculation = () => {
           type={"text"}
           placeholder={"0.00"}
         />
-        <div className="mt-2">
+        <div className="mt-2 mb-6">
           <Button type="submit">Calcular</Button>
         </div>
       </form>
 
-      <div className="space-y-4 border-t border-gray-300">
-        <h3 className="mt-3">Participantes e Valores</h3>
-        <div className="w-full flex flex-wrap justify-between gap-3">
+      <div className="space-y-4 border-t text-[#666666] font-semibold ">
+        <h3 className="mt-4">Participantes e Valores</h3>
+        <div className="w-full flex text-sm justify-between gap-1.5">
           {participants
             ? participants.map((participant, index) => (
                 <div
                   key={index}
-                  className="w-[48%] max-sm:w-[47%] flex justify-between shadow-md bg-gray-200 p-3 rounded-md"
+                  className="w-full flex justify-between border p-3 rounded-full"
                 >
-                  <p>{participant.name}</p>
+                  <p className="truncate max-w-[70%]">{participant.name}</p>
                   <p>
                     {participant.amount.length > 0
                       ? participant.amount

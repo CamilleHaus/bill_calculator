@@ -13,9 +13,9 @@ const App = () => {
   // INFORMACAO DE CONSUMO E DIVISAO DE VALORES __________________________________
 
   return (
-    <div>
-      <div className="w-full bg-gray-50 p-5 max-sm:p-1 flex items-center justify-center flex-col gap-10">
-        <div className="max-w-[450px] w-[100%] border bg-gray-100 mx-auto space-y-4 max-sm:px-4 px-6 py-6 rounded-md shadow-lg">
+    <div className="bg-[rgb(214,230,248)] px-2 py-5">
+      <div className="w-full p-1 flex items-center justify-center flex-col gap-10">
+        <div className="max-w-[450px] w-[100%] border bg-gray-100 mx-auto space-y-4 px-6 md:px-6 py-10 rounded-md">
           <div className="flex justify-center gap-2">
             <h1 className="text-2xl font-bold">Saidinha</h1>
             <Beer size={28} strokeWidth={2} />

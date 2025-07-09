@@ -56,7 +56,7 @@ const ParticipantsList = () => {
   return (
     <div>
       <div className="mb-4">
-        <form onSubmit={addParticipant} className="flex gap-3 items-end mb-2">
+        <form onSubmit={addParticipant} className="flex gap-2 items-end mb-4">
           <Input
             ref={participantInputRef}
             label={"Participantes"}
@@ -72,15 +72,15 @@ const ParticipantsList = () => {
         </form>
 
         {participants.length > 0 ? (
-          <div className="w-full flex gap-3 flex-wrap">
+          <div className="w-full flex gap-2 flex-wrap text-[#666666] font-semibold ">
             {participants.map((participant, index) => (
               <div
                 key={index}
-                className="w-fit flex gap-2 items-center justify-center p-2 rounded-md shadow-md"
+                className="w-fit flex gap-2 text-sm items-center justify-center px-4 py-1 rounded-full border"
               >
                 <p>{participant.name}</p>
                 <button
-                  className="text-sm"
+                  className=""
                   type="button"
                   onClick={() => removeParticipant(index)}
                 >
@@ -93,8 +93,8 @@ const ParticipantsList = () => {
       </div>
 
       {/* FORMULÁRIO DE GORJETA E VALOR */}
-      <form onSubmit={getAllInfo} className="flex flex-col gap-6">
-        <div className="flex gap-4 max-sm:flex-col">
+      <form onSubmit={getAllInfo} className="flex flex-col gap-8 pt-3">
+        <div className="flex gap-6 max-sm:flex-col">
           <Input
             ref={billTotalInputRef}
             label={"Valor total da conta"}
@@ -104,7 +104,7 @@ const ParticipantsList = () => {
           />
           <Input
             ref={tipValueInputRef}
-            label={"Valor da gorjeta?(%)"}
+            label={"Valor da gorjeta? (%)"}
             name={"tip"}
             type={"text"}
             placeholder={"10%"}

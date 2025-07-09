@@ -9,7 +9,7 @@ interface IButton {
 const Button = ({ children, onClick, type }: IButton) => {
   return (
     <button
-      className="w-full text-slate-50 bg-slate-800 py-3 rounded-md flex items-center justify-center"
+      className="w-full text-slate-50 bg-slate-800 py-3 rounded-full flex items-center justify-center text-sm"
       onClick={onClick}
       type={type}
     >
