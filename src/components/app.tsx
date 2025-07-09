@@ -13,9 +13,9 @@ const App = () => {
   // INFORMACAO DE CONSUMO E DIVISAO DE VALORES __________________________________
 
   return (
-    <div className="bg-[rgb(214,230,248)] px-2 py-5">
-      <div className="w-full p-1 flex items-center justify-center flex-col gap-10">
-        <div className="max-w-[450px] w-[100%] border bg-gray-100 mx-auto space-y-4 px-6 md:px-6 py-10 rounded-md">
+    <div className="md:bg-[rgb(214,230,248)] md:px-2 md:py-5">
+      <div className="w-full p-1 flex items-center justify-center flex-col md:gap-10">
+        <div className="max-w-[450px] w-[100%] md:border bg-gray-100 mx-auto space-y-4 px-8 md:px-6 py-10 rounded-md">
           <div className="flex justify-center gap-2">
             <h1 className="text-2xl font-bold">Saidinha</h1>
             <Beer size={28} strokeWidth={2} />
@@ -23,7 +23,7 @@ const App = () => {
           <ParticipantsList />
         </div>
 
-        <div className="max-w-[450px] w-[100%] border bg-gray-100 mx-auto space-y-4 max-sm:px-4 px-6 py-6 rounded-md shadow-lg">
+        <div className="max-w-[450px] w-[100%] md:border bg-gray-100 mx-auto space-y-4 px-8 py-6 rounded-md shadow-lg">
           <Calculation />
         </div>
       </div>

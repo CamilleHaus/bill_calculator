@@ -14,9 +14,9 @@ const Input = forwardRef<
 >(({ label, name, type, placeholder, ...rest }, ref) => {
   return (
     <div className="w-full flex flex-col gap-2">
-      <label className="text-[#666666] font-semibold">{label}</label>
+      <label className="text-[#666666] font-semibold ">{label}</label>
       <input
-        className="px-2 py-3 rounded-md"
+        className="px-2 py-3 rounded-md placeholder:text-sm"
         name={name}
         type={type}
         placeholder={placeholder}

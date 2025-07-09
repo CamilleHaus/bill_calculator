@@ -1,7 +1,7 @@
 import React, { FormEvent, useRef } from "react";
 import Input from "./Input";
 import Button from "./Button";
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useCalculation } from "@/providers/CalculationContext";
 
 const ParticipantsList = () => {
@@ -56,7 +56,8 @@ const ParticipantsList = () => {
   return (
     <div>
       <div className="mb-4">
-        <form onSubmit={addParticipant} className="flex gap-2 items-end mb-4">
+        <form onSubmit={addParticipant} className="mb-4">
+          <div className="flex items-end gap-2">
           <Input
             ref={participantInputRef}
             label={"Participantes"}
@@ -69,14 +70,15 @@ const ParticipantsList = () => {
               <Plus size={24} strokeWidth={2} />
             </Button>
           </div>
+          </div>
         </form>
 
         {participants.length > 0 ? (
-          <div className="w-full flex gap-2 flex-wrap text-[#666666] font-semibold ">
+          <div className="w-full flex flex-col gap-1 text-[#666666] font-semibold ">
             {participants.map((participant, index) => (
               <div
                 key={index}
-                className="w-fit flex gap-2 text-sm items-center justify-center px-4 py-1 rounded-full border"
+                className="flex gap-2 text-sm items-center justify-between py-3 px-5 rounded-full border"
               >
                 <p>{participant.name}</p>
                 <button
@@ -84,7 +86,7 @@ const ParticipantsList = () => {
                   type="button"
                   onClick={() => removeParticipant(index)}
                 >
-                  X
+                  <Trash size={16}/>
                 </button>
               </div>
             ))}
@@ -94,7 +96,7 @@ const ParticipantsList = () => {
 
       {/* FORMULÁRIO DE GORJETA E VALOR */}
       <form onSubmit={getAllInfo} className="flex flex-col gap-8 pt-3">
-        <div className="flex gap-6 max-sm:flex-col">
+        <div className="flex gap-6 flex-col">
           <Input
             ref={billTotalInputRef}
             label={"Valor total da conta"}

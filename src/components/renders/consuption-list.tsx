@@ -1,3 +1,4 @@
+import { Trash } from "lucide-react";
 import React from "react";
 
 interface IConsuptionList {
@@ -8,13 +9,14 @@ interface IConsuptionList {
 
 const ConsuptionList = ({ onClick, name, price }: IConsuptionList) => {
   return (
-    <div className="w-fit flex gap-3 items-center text-[#666666] justify-center py-2 rounded-full border px-4 text-sm font-semibold">
+    <div className="w-full flex gap-3 items-center text-[#666666] justify-between py-3 px-5 rounded-full border text-sm">
       <div className="flex gap-1">
-        <p>{name} |</p>
-        <p>{price}</p>
+        <p className="font-semibold">{name}</p>
+        <p>|</p>
+        <p className="font-semibold">{price}</p>
       </div>
       <button className="text-sm" type="button" onClick={onClick}>
-        X
+        <Trash size={16} />
       </button>
     </div>
   );

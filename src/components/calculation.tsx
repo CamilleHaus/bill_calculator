@@ -114,13 +114,13 @@ const Calculation = () => {
     <div>
       {/* FORMULÁRIO DE PARTICIPANTES */}
 
-      <div className="flex  mb-4 border text-sm text-[#666666]">
-        <div className="w-full flex flex-col items-center bg-gray-50 px-3 py-2 rounded-md gap-2 border-r">
+      <div className="flex  mb-4 border text-sm text-[#666666] mt-4">
+        <div className="w-full flex flex-col items-center bg-gray-50 px-3 py-3 rounded-md gap-2 border-r">
           <p className="text-center">Valor total</p>
           <p className="border-b w-full"></p>
           <p className="mt-1">{billTotal}</p>
         </div>
-        <div className="flex flex-col items-center justify-between w-full bg-gray-50 px-3 py-2 rounded-md gap-1">
+        <div className="w-full flex flex-col items-center bg-gray-50 px-3 py-3 rounded-md gap-2">
           <p className="text-center">Valor restante </p>
            <p className="border-b w-full"></p>
           {Number.isNaN(billTotal! - totalAmount) ? (
@@ -157,7 +157,7 @@ const Calculation = () => {
           <select
             ref={selectPeopleInputRef}
             id="participant-select"
-            className="px-2 py-3 rounded-md"
+            className="px-2 py-3 rounded-md min-h-[100px]"
             multiple
           >
             {participants.length > 0 ? (
@@ -167,7 +167,7 @@ const Calculation = () => {
                 </option>
               ))
             ) : (
-              <option disabled>Nenhum participante</option>
+              <option className="text-sm" disabled>Nenhum participante</option>
             )}
           </select>
         </div>
@@ -185,14 +185,14 @@ const Calculation = () => {
 
       <div className="space-y-4 border-t text-[#666666] font-semibold ">
         <h3 className="mt-4">Participantes e Valores</h3>
-        <div className="w-full flex text-sm justify-between gap-1.5">
+        <div className="w-full flex flex-col text-sm justify-between gap-1.5">
           {participants
             ? participants.map((participant, index) => (
                 <div
                   key={index}
-                  className="w-full flex justify-between border p-3 rounded-full"
+                  className="w-full flex  justify-between border py-3 px-5 rounded-full"
                 >
-                  <p className="truncate max-w-[70%]">{participant.name}</p>
+                  <p className="">{participant.name}</p>
                   <p>
                     {participant.amount.length > 0
                       ? participant.amount
